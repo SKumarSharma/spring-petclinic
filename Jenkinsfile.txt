@@ -17,5 +17,19 @@ pipeline {
             bat 'mvn clean package'
          }
       }
+	  stage('Sonar') {
+         steps {
+            bat 'mvn sonar:sonar'
+         }
+      }
+	  stage('Static code analysis') {
+         steps {
+            dir("{SRC_DIR}"){
+			withSonarQubeEnv('localsonar'){
+			sh "sonar-scanner -Dsonar.host.url=http://sonarqube:9000"
+         }
+		 
+      }}
    }
+}
 }
